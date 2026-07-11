@@ -4,7 +4,7 @@ A production-ready Full Stack Seat Allocation & Project Mapping System built usi
 
 ---
 
-## ✨ Features
+## Features
 
 - 📊 Dashboard Analytics
 - 👨‍💼 Employee Management
@@ -18,7 +18,7 @@ A production-ready Full Stack Seat Allocation & Project Mapping System built usi
 
 ---
 
-# 🛠 Tech Stack
+# Tech Stack
 
 ### Frontend
 - React.js
@@ -41,7 +41,7 @@ A production-ready Full Stack Seat Allocation & Project Mapping System built usi
 - Render
 
 
-# 📷 Screenshots
+# Screenshots
 
 ## Dashboard
 
@@ -68,7 +68,7 @@ A production-ready Full Stack Seat Allocation & Project Mapping System built usi
 
 # Live Demo
 
-### 🌐 Frontend
+### Frontend
 
 https://ethara-seat-allocation-system-five.vercel.app
 
@@ -82,7 +82,7 @@ https://ethara-seat-allocation-system-t0he.onrender.com/docs
 
 ---
 
-# 📂 Project Structure
+# Project Structure
 
 ```text
 Ethara_Seat_Allocation/
@@ -106,7 +106,7 @@ Ethara_Seat_Allocation/
 
 ---
 
-# ⚙ Installation
+# Installation
 
 ## Clone Repository
 
