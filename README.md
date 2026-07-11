@@ -126,36 +126,33 @@ Ethara_Seat_Allocation/
 
 ---
 
-# Screenshots
-
 ## Dashboard
 
-(Add Screenshot)
+![Dashboard](screenshots/dashboard.png)
 
 ---
 
 ## Employees
 
-(Add Screenshot)
+![Employees](screenshots/employees.png)
 
 ---
 
 ## Projects
 
-(Add Screenshot)
+![Projects](screenshots/projects.png)
 
 ---
 
 ## Seats
 
-(Add Screenshot)
+![Seats](screenshots/seats.png)
 
 ---
 
 ## AI Assistant
 
-(Add Screenshot)
-
+![AI Assistant](screenshots/ai-assistant.png)
 ---
 
 # ⚙ Installation
