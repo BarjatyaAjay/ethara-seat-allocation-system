@@ -1,113 +1,309 @@
 # Ethara Seat Allocation System
 
-A full-stack workspace management application for tracking employees, projects, and seat allocations across office buildings.
+A modern full-stack Seat Allocation Management System built for efficient employee workspace allocation, project management, and AI-assisted seat assignment.
 
-## Tech Stack
+---
 
-| Layer    | Technology                          |
-|----------|-------------------------------------|
-| Frontend | React 19, Vite, TailwindCSS, Recharts |
-| Backend  | FastAPI, SQLAlchemy, SQLite         |
-| State    | React hooks, Axios                  |
-| UI       | react-hot-toast, react-icons        |
+##  Overview
 
-## Features
+Ethara Seat Allocation System is an enterprise-ready web application that helps organizations efficiently manage:
 
-### Dashboard
-- Occupancy summary cards (employees, seats, projects)
-- Department-wise employee distribution chart
-- Floor and project utilization charts
-- Seat distribution pie chart
-- Recent activity feed
+- 👨‍💼 Employees
+- 💺 Seat Allocation
+- 📁 Projects
+- 📊 Dashboard Analytics
+- 🤖 AI Assistant for Seat Management
 
-### Employees
-- Full CRUD (add, edit, delete with confirmation)
-- Server-side pagination and multi-field search
-- Loading states, empty states, toast notifications
+The system provides a clean dashboard with real-time statistics, intelligent seat allocation, and powerful search capabilities.
 
-### Projects
-- Full CRUD with validation
-- Search and pagination
+---
 
-### Seats
-- Allocate and release seats
-- Filter by building, floor, and status
-- Search by seat code, zone, or building
+#  Features
 
-### AI Assistant
-- Chat-style interface with message history
-- Natural language queries for seats, employees, utilization
-- Auto seat allocation by employee ID
-- Structured result tables
+## 📊 Dashboard
 
-## Project Structure
+- Total Employees
+- Total Seats
+- Available Seats
+- Occupied Seats
+- Project Statistics
+- Occupancy Summary
+
+---
+
+##  Employee Management
+
+- View Employees
+- Search Employees
+- Add Employee
+- Edit Employee
+- Delete Employee
+- Department Management
+- Seat Assignment Information
+
+---
+
+## Project Management
+
+- View Projects
+- Search Projects
+- Add Projects
+- Edit Projects
+- Delete Projects
+- Required Seat Tracking
+
+---
+
+## Seat Management
+
+- View Seats
+- Allocate Seat
+- Release Seat
+- Auto Seat Allocation
+- Seat Availability Status
+
+---
+
+## AI Assistant
+
+Natural language interface for seat management.
+
+Example queries:
+
+- Show available seats
+- Dashboard summary
+- Project utilization
+- Find unassigned employees
+- Auto allocate seat
+
+---
+
+# Tech Stack
+
+## Frontend
+
+- React.js
+- Vite
+- Tailwind CSS
+- Axios
+- React Router
+- React Icons
+
+## Backend
+
+- FastAPI
+- SQLAlchemy
+- Pydantic
+
+## Database
+
+- SQLite
+
+---
+
+# Project Structure
 
 ```
-Ethera_Seat_Allocation/
+Ethara_Seat_Allocation/
+
 ├── backend/
 │   ├── app/
-│   │   ├── main.py              # FastAPI entry point
-│   │   ├── models.py            # SQLAlchemy models
-│   │   ├── schemas.py           # Pydantic schemas
-│   │   ├── crud.py              # Database operations
-│   │   ├── seed.py              # Database seeder
-│   │   ├── routers/             # API route handlers
-│   │   └── services/            # Business logic
-│   └── requirements.txt
-└── frontend/
-    └── src/
-        ├── components/
-        │   ├── charts/          # Recharts visualizations
-        │   ├── dashboard/       # Dashboard widgets
-        │   ├── employees/       # Employee modals
-        │   ├── projects/        # Project modals
-        │   ├── seats/           # Seat allocation modals
-        │   ├── layout/          # Navbar, Sidebar
-        │   └── ui/              # Shared UI components
-        ├── pages/               # Route pages
-        └── services/            # API client
+│   ├── database.py
+│   ├── models.py
+│   ├── routers/
+│   └── main.py
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── App.jsx
+│   └── package.json
+│
+└── README.md
 ```
 
-## Getting Started
+---
 
-### Prerequisites
-- Python 3.11+
-- Node.js 18+
+# Screenshots
 
-### Backend Setup
+## Dashboard
+
+(Add Screenshot)
+
+---
+
+## Employees
+
+(Add Screenshot)
+
+---
+
+## Projects
+
+(Add Screenshot)
+
+---
+
+## Seats
+
+(Add Screenshot)
+
+---
+
+## AI Assistant
+
+(Add Screenshot)
+
+---
+
+# ⚙ Installation
+
+## Clone Repository
+
+```bash
+git clone https://github.com/BarjatyaAjay/ethara-seat-allocation-system.git
+```
+
+```
+cd ethara-seat-allocation-system
+```
+
+---
+
+## Backend Setup
 
 ```bash
 cd backend
+
 python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python -m app.seed          # Seed database (5000 employees)
-python -m uvicorn app.main:app --reload
+
+source .venv/bin/activate
 ```
 
-API runs at `http://127.0.0.1:8000` — docs at `/docs`.
+Install dependencies
 
-### Frontend Setup
+```bash
+pip install -r requirements.txt
+```
+
+Run backend
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Backend
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+## Frontend Setup
 
 ```bash
 cd frontend
+
 npm install
-npm run dev      # Development server at http://localhost:5173
-npm run build    # Production build
 ```
 
-## API Endpoints
+Run frontend
 
-| Resource   | Endpoints                                              |
-|------------|--------------------------------------------------------|
-| Employees  | `GET/POST /employees`, `PUT/DELETE /employees/{id}`    |
-| Projects   | `GET/POST /projects`, `PUT/DELETE /projects/{id}`      |
-| Seats      | `GET/POST /seats`, `POST /seats/allocate`, `/release`  |
-| Dashboard  | `/summary`, `/department-stats`, `/floor-utilization`  |
-| AI         | `POST /ai/query`                                       |
+```bash
+npm run dev
+```
 
-All endpoints are prefixed with `/api/v1`.
+Frontend
 
-## License
+```
+http://localhost:5173
+```
 
-MIT
+---
+
+# 📡 API Endpoints
+
+## Employees
+
+```
+GET /api/v1/employees
+
+POST /api/v1/employees
+
+PUT /api/v1/employees/{id}
+
+DELETE /api/v1/employees/{id}
+```
+
+---
+
+## Projects
+
+```
+GET /api/v1/projects
+
+POST /api/v1/projects
+
+PUT /api/v1/projects/{id}
+
+DELETE /api/v1/projects/{id}
+```
+
+---
+
+## Seats
+
+```
+GET /api/v1/seats
+
+POST /api/v1/seats/allocate
+
+POST /api/v1/seats/release
+
+POST /api/v1/seats/auto-allocate/{employee_id}
+```
+
+---
+
+## Dashboard
+
+```
+GET /api/v1/dashboard/summary
+```
+
+---
+
+## AI Assistant
+
+```
+POST /api/v1/ai/query
+```
+
+---
+
+# Future Improvements
+
+- Authentication
+- Role Based Access
+- Email Notifications
+- Floor Map Visualization
+- Dark Mode
+- Cloud Deployment
+- PostgreSQL Support
+- Docker Support
+- Kubernetes Deployment
+
+---
+
+# Author
+
+**Ajay Bairwa**
+
+GitHub
+
+https://github.com/BarjatyaAjay
+
+---
