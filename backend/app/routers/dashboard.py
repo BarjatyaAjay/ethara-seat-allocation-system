@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends
 from sqlalchemy import case, func
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.database import get_db
 from app.models import Employee, EmployeeStatus, Project, ProjectStatus, Seat, SeatStatus
-from app.schemas import DashboardSummary, FloorUtilization, ProjectUtilization
+from app.schemas import DashboardSummary, DepartmentCount, FloorUtilization, ProjectUtilization, RecentActivity
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
@@ -129,3 +129,58 @@ def get_floor_utilization(db: Session = Depends(get_db)):
         )
 
     return results
+
+
+@router.get("/department-stats", response_model=list[DepartmentCount])
+def get_department_stats(db: Session = Depends(get_db)):
+    stats = (
+        db.query(Employee.department, func.count(Employee.id).label("count"))
+        .filter(Employee.department.isnot(None), Employee.department != "")
+        .group_by(Employee.department)
+        .order_by(func.count(Employee.id).desc())
+        .all()
+    )
+    return [
+        DepartmentCount(department=row.department or "Unknown", count=row.count)
+        for row in stats
+    ]
+
+
+@router.get("/recent-activity", response_model=list[RecentActivity])
+def get_recent_activity(db: Session = Depends(get_db), limit: int = 10):
+    activities: list[RecentActivity] = []
+
+    recent_allocations = (
+        db.query(Seat)
+        .options(joinedload(Seat.employee))
+        .filter(Seat.allocated_at.isnot(None))
+        .order_by(Seat.allocated_at.desc())
+        .limit(limit)
+        .all()
+    )
+    for seat in recent_allocations:
+        activities.append(
+            RecentActivity(
+                action="seat_allocated",
+                description=f"Seat {seat.seat_code} allocated to {seat.employee.name if seat.employee else 'Unknown'}",
+                timestamp=seat.allocated_at,
+            )
+        )
+
+    recent_employees = (
+        db.query(Employee)
+        .order_by(Employee.created_at.desc())
+        .limit(limit)
+        .all()
+    )
+    for emp in recent_employees:
+        activities.append(
+            RecentActivity(
+                action="employee_added",
+                description=f"Employee {emp.name} ({emp.employee_code}) added",
+                timestamp=emp.created_at,
+            )
+        )
+
+    activities.sort(key=lambda a: a.timestamp, reverse=True)
+    return activities[:limit]

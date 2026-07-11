@@ -180,6 +180,17 @@ class FloorUtilization(BaseModel):
     occupancy_rate: float
 
 
+class DepartmentCount(BaseModel):
+    department: str
+    count: int
+
+
+class RecentActivity(BaseModel):
+    action: str
+    description: str
+    timestamp: datetime
+
+
 # ── AI Assistant ─────────────────────────────────────────────────────────────
 
 

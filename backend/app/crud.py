@@ -199,7 +199,13 @@ def get_seats(
 
     if search:
         term = f"%{search}%"
-        query = query.filter(or_(Seat.seat_code.ilike(term), Seat.zone.ilike(term)))
+        query = query.filter(
+            or_(
+                Seat.seat_code.ilike(term),
+                Seat.zone.ilike(term),
+                Seat.building.ilike(term),
+            )
+        )
     if floor is not None:
         query = query.filter(Seat.floor == floor)
     if zone:
