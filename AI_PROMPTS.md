@@ -1,94 +1,224 @@
 # AI_PROMPTS.md
 
-# Ethara Seat Allocation & Project Mapping System
+# AI Usage Documentation
 
-## 1. Prompt used for planning
-
-Design a production-ready full-stack seat allocation system for managing 5000 employees using React, FastAPI and SQLite. Include dashboard, employee management, project management, seat allocation and AI assistant.
-
----
-
-## 2. Prompt used for backend
-
-Generate a FastAPI backend with REST APIs for employees, projects, seats, dashboard and AI assistant. Use SQLAlchemy ORM and Pydantic models.
+## Project
+Ethara Seat Allocation & Project Mapping System
 
 ---
 
-## 3. Prompt used for database
+# AI Tools Used
 
-Design a normalized database schema for Employee, Project, Seat and Seat Allocation supporting 5000 employees.
-
----
-
-## 4. Prompt used for frontend
-
-Build a responsive React dashboard using Tailwind CSS. Include pages for Dashboard, Employees, Projects, Seats and AI Assistant.
+- ChatGPT (GPT-5.5)
+- Cursor AI
 
 ---
 
-## 5. Prompt used for AI Assistant
+# Prompt 1 – Project Planning
 
-Create a rule-based assistant that answers queries like:
+Design a production-ready Full Stack Seat Allocation System for managing 5000 employees.
 
-- Where is employee seated?
-- Show available seats.
-- Dashboard summary.
-- Project utilization.
+Requirements:
+- React + Vite frontend
+- FastAPI backend
+- SQLite database
+- Dashboard
+- Employee Management
+- Project Management
+- Seat Allocation
+- AI Assistant
+- Responsive UI
+- REST APIs
 
----
-
-## 6. Prompt used for debugging
-
-Help debug React frontend deployment, FastAPI APIs, CORS issues, Git problems and Vercel deployment.
-
----
-
-## 7. Prompt used for deployment
-
-Deploy FastAPI backend on Render and React frontend on Vercel with environment variables.
+Purpose:
+Used for overall project architecture and planning.
 
 ---
 
-# What AI generated correctly
+# Prompt 2 – Database Design
 
-- Project architecture
-- API structure
-- Database models
-- React components
-- Dashboard layout
-- CRUD APIs
-- Deployment guidance
+Design a normalized database schema with relationships for:
+
+- Employees
+- Projects
+- Seats
+- Seat Allocation
+
+Requirements:
+- Foreign Keys
+- Proper indexing
+- Scalable for 5000+ employees
+
+Purpose:
+Generated SQLAlchemy models and database structure.
 
 ---
 
-# What AI generated incorrectly
+# Prompt 3 – Backend API Generation
 
-- Some API integrations required manual fixes.
-- Frontend deployment required environment variable updates.
-- Git repository contained a frontend submodule that had to be converted into a normal folder.
+Generate FastAPI CRUD APIs with SQLAlchemy.
+
+Modules:
+
+- Employees
+- Projects
+- Seats
+- Dashboard
+- AI Assistant
+
+Requirements:
+
+- REST APIs
+- Pydantic Validation
+- Error Handling
+- Pagination
+- Search APIs
+
+Purpose:
+Backend implementation.
 
 ---
 
-# Manual fixes performed
+# Prompt 4 – Frontend Development
 
-- Fixed Git repository structure.
-- Removed accidental frontend submodule.
-- Configured Render deployment.
-- Configured Vercel deployment.
-- Added environment variables.
-- Fixed API URLs.
-- Updated README.
-- Added screenshots.
-- Verified API endpoints.
+Build a modern React dashboard using Tailwind CSS.
+
+Pages:
+
+- Dashboard
+- Employees
+- Projects
+- Seats
+- AI Assistant
+
+Requirements:
+
+- Responsive Layout
+- Sidebar
+- Navbar
+- Search
+- Statistics Cards
+- Tables
+- Charts
+
+Purpose:
+Frontend implementation.
+
+---
+
+# Prompt 5 – AI Assistant
+
+Create a rule-based AI Assistant capable of answering:
+
+- Show available seats
+- Dashboard summary
+- Seat occupancy
+- Project utilization
+- Employee seat lookup
+- Unassigned employees
+
+Purpose:
+Natural language interaction.
+
+---
+
+# Prompt 6 – Debugging
+
+Debug:
+
+- React errors
+- FastAPI errors
+- CORS
+- Axios
+- Git
+- Deployment
+- Environment Variables
+
+Purpose:
+Resolved deployment and runtime issues.
+
+---
+
+# Prompt 7 – Deployment
+
+Deploy:
+
+Backend:
+- Render
+
+Frontend:
+- Vercel
+
+Requirements:
+
+- Environment Variables
+- Production API URL
+- Build Configuration
+
+Purpose:
+Production deployment.
+
+---
+
+# Prompt 8 – Documentation
+
+Generate:
+
+- README.md
+- Installation Guide
+- API Documentation
+- GitHub Documentation
+
+Purpose:
+Project documentation.
+
+---
+
+# Manual Development Work
+
+The following tasks were completed manually after AI-generated suggestions:
+
+- Project structure setup
+- API integration
+- Bug fixing
+- Git repository management
+- GitHub configuration
+- Deployment
+- Environment variable configuration
+- Testing
+- Documentation improvements
+
+---
+
+# AI Limitations Encountered
+
+AI-generated code required manual corrections for:
+
+- Git submodule issue
+- Deployment configuration
+- Environment variables
+- Frontend API integration
+- Production deployment
 
 ---
 
 # Verification
 
-- Tested CRUD APIs
-- Tested dashboard
-- Tested AI Assistant
-- Tested deployment
-- Verified frontend and backend communication
+The project was manually tested for:
 
-Project completed successfully.
+- Employee APIs
+- Project APIs
+- Seat APIs
+- Dashboard APIs
+- AI Assistant
+- Frontend functionality
+- Backend functionality
+- GitHub repository
+- Render deployment
+- Vercel deployment
+
+---
+
+# Outcome
+
+AI accelerated development, debugging, documentation, and deployment while manual verification ensured correctness and production readiness.
