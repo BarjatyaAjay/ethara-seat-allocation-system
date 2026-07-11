@@ -40,23 +40,6 @@ A production-ready Full Stack Seat Allocation & Project Mapping System built usi
 - Vercel
 - Render
 
----
-
-# 🚀 Live Demo
-
-### 🌐 Frontend
-
-https://ethara-seat-allocation-system-five.vercel.app
-
-### ⚙ Backend API
-
-https://ethara-seat-allocation-system-t0he.onrender.com
-
-### 📚 API Documentation
-
-https://ethara-seat-allocation-system-t0he.onrender.com/docs
-
----
 
 # 📷 Screenshots
 
