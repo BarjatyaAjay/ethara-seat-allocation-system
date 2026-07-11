@@ -1,169 +1,127 @@
-# Ethara Seat Allocation System
+# 🚀 Ethara Seat Allocation System
 
-A modern full-stack Seat Allocation Management System built for efficient employee workspace allocation, project management, and AI-assisted seat assignment.
+A production-ready Full Stack Seat Allocation & Project Mapping System built using **React, FastAPI, SQLite, Tailwind CSS**, and deployed on **Vercel** and **Render**.
 
 ---
 
-##  Overview
+## ✨ Features
 
-Ethara Seat Allocation System is an enterprise-ready web application that helps organizations efficiently manage:
-
-- 👨‍💼 Employees
-- 💺 Seat Allocation
-- 📁 Projects
 - 📊 Dashboard Analytics
-- 🤖 AI Assistant for Seat Management
-
-The system provides a clean dashboard with real-time statistics, intelligent seat allocation, and powerful search capabilities.
-
----
-
-#  Features
-
-## 📊 Dashboard
-
-- Total Employees
-- Total Seats
-- Available Seats
-- Occupied Seats
-- Project Statistics
-- Occupancy Summary
+- 👨‍💼 Employee Management
+- 📁 Project Management
+- 💺 Seat Allocation
+- 🔍 Search & Filter
+- 🤖 AI Assistant
+- 📈 Occupancy Statistics
+- ⚡ REST APIs
+- 🌐 Fully Deployed Application
 
 ---
 
-##  Employee Management
+# 🛠 Tech Stack
 
-- View Employees
-- Search Employees
-- Add Employee
-- Edit Employee
-- Delete Employee
-- Department Management
-- Seat Assignment Information
-
----
-
-## Project Management
-
-- View Projects
-- Search Projects
-- Add Projects
-- Edit Projects
-- Delete Projects
-- Required Seat Tracking
-
----
-
-## Seat Management
-
-- View Seats
-- Allocate Seat
-- Release Seat
-- Auto Seat Allocation
-- Seat Availability Status
-
----
-
-## AI Assistant
-
-Natural language interface for seat management.
-
-Example queries:
-
-- Show available seats
-- Dashboard summary
-- Project utilization
-- Find unassigned employees
-- Auto allocate seat
-
----
-
-# Tech Stack
-
-## Frontend
-
+### Frontend
 - React.js
 - Vite
 - Tailwind CSS
 - Axios
 - React Router
-- React Icons
+- Recharts
 
-## Backend
-
+### Backend
 - FastAPI
 - SQLAlchemy
 - Pydantic
 
-## Database
-
+### Database
 - SQLite
 
----
-
-# Project Structure
-
-```
-Ethara_Seat_Allocation/
-
-├── backend/
-│   ├── app/
-│   ├── database.py
-│   ├── models.py
-│   ├── routers/
-│   └── main.py
-│
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   └── App.jsx
-│   └── package.json
-│
-└── README.md
-```
+### Deployment
+- Vercel
+- Render
 
 ---
+
+# 🚀 Live Demo
+
+### 🌐 Frontend
+
+https://ethara-seat-allocation-system-five.vercel.app
+
+### ⚙ Backend API
+
+https://ethara-seat-allocation-system-t0he.onrender.com
+
+### 📚 API Documentation
+
+https://ethara-seat-allocation-system-t0he.onrender.com/docs
+
+---
+
+# 📷 Screenshots
 
 ## Dashboard
 
 ![Dashboard](screenshots/dashboard.png)
 
----
-
 ## Employees
 
 ![Employees](screenshots/employees.png)
-
----
 
 ## Projects
 
 ![Projects](screenshots/projects.png)
 
----
-
 ## Seats
 
 ![Seats](screenshots/seats.png)
 
----
-
 ## AI Assistant
 
-![AI Assistant](screenshots/ai-assistant.png)
----
-## 🚀 Live Demo
+![AI Assistant](screenshots/assistant.png)
 
-Frontend:
+---
+---
+
+# 🚀 Live Demo
+
+### 🌐 Frontend
+
 https://ethara-seat-allocation-system-five.vercel.app
 
-Backend:
+### ⚙️ Backend API
+
 https://ethara-seat-allocation-system-t0he.onrender.com
 
-API Docs:
+### 📚 API Documentation (Swagger UI)
+
 https://ethara-seat-allocation-system-t0he.onrender.com/docs
+
+---
+
+# 📂 Project Structure
+
+```text
+Ethara_Seat_Allocation/
+│
+├── backend/
+│   ├── app/
+│   ├── requirements.txt
+│   ├── ethara.db
+│   └── main.py
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.js
+│
+├── screenshots/
+├── README.md
+└── AI_PROMPTS.md
+```
+
+---
 
 # ⚙ Installation
 
@@ -173,13 +131,11 @@ https://ethara-seat-allocation-system-t0he.onrender.com/docs
 git clone https://github.com/BarjatyaAjay/ethara-seat-allocation-system.git
 ```
 
-```
+```bash
 cd ethara-seat-allocation-system
 ```
 
----
-
-## Backend Setup
+## Backend
 
 ```bash
 cd backend
@@ -187,17 +143,9 @@ cd backend
 python -m venv .venv
 
 source .venv/bin/activate
-```
 
-Install dependencies
-
-```bash
 pip install -r requirements.txt
-```
 
-Run backend
-
-```bash
 uvicorn app.main:app --reload
 ```
 
@@ -207,19 +155,13 @@ Backend
 http://127.0.0.1:8000
 ```
 
----
-
-## Frontend Setup
+## Frontend
 
 ```bash
 cd frontend
 
 npm install
-```
 
-Run frontend
-
-```bash
 npm run dev
 ```
 
@@ -235,82 +177,55 @@ http://localhost:5173
 
 ## Employees
 
-```
-GET /api/v1/employees
-
-POST /api/v1/employees
-
-PUT /api/v1/employees/{id}
-
-DELETE /api/v1/employees/{id}
-```
-
----
+- GET /api/v1/employees
+- POST /api/v1/employees
+- PUT /api/v1/employees/{id}
+- DELETE /api/v1/employees/{id}
 
 ## Projects
 
-```
-GET /api/v1/projects
-
-POST /api/v1/projects
-
-PUT /api/v1/projects/{id}
-
-DELETE /api/v1/projects/{id}
-```
-
----
+- GET /api/v1/projects
+- POST /api/v1/projects
+- PUT /api/v1/projects/{id}
+- DELETE /api/v1/projects/{id}
 
 ## Seats
 
-```
-GET /api/v1/seats
-
-POST /api/v1/seats/allocate
-
-POST /api/v1/seats/release
-
-POST /api/v1/seats/auto-allocate/{employee_id}
-```
-
----
+- GET /api/v1/seats
+- POST /api/v1/seats/allocate
+- POST /api/v1/seats/release
 
 ## Dashboard
 
-```
-GET /api/v1/dashboard/summary
-```
-
----
+- GET /api/v1/dashboard/summary
 
 ## AI Assistant
 
-```
-POST /api/v1/ai/query
-```
+- POST /api/v1/ai/query
 
 ---
 
-# Future Improvements
+# 🔮 Future Improvements
 
-- Authentication
-- Role Based Access
-- Email Notifications
+- JWT Authentication
+- Role-Based Access Control
+- PostgreSQL
+- Docker
+- Kubernetes
+- CI/CD
 - Floor Map Visualization
+- Email Notifications
 - Dark Mode
-- Cloud Deployment
-- PostgreSQL Support
-- Docker Support
-- Kubernetes Deployment
 
 ---
 
-# Author
+# 👨‍💻 Author
 
 **Ajay Bairwa**
 
-GitHub
-
-https://github.com/BarjatyaAjay
+- GitHub: https://github.com/BarjatyaAjay
+- LinkedIn: *(Add your LinkedIn URL here)*
 
 ---
+
+⭐ If you found this project useful, consider giving it a star.
