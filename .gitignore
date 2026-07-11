@@ -3,3 +3,22 @@ frontend/node_modules/
 __pycache__/
 *.pyc
 .DS_Store
+# Python
+.venv/
+backend/venv/
+__pycache__/
+*.pyc
+
+# Node
+frontend/node_modules/
+
+# Environment
+.env
+backend/.env
+
+# Build
+dist/
+build/
+
+# macOS
+.DS_Store
