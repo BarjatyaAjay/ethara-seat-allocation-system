@@ -154,6 +154,16 @@ Ethara_Seat_Allocation/
 
 ![AI Assistant](screenshots/ai-assistant.png)
 ---
+## 🚀 Live Demo
+
+Frontend:
+https://ethara-seat-allocation-system-five.vercel.app
+
+Backend:
+https://ethara-seat-allocation-system-t0he.onrender.com
+
+API Docs:
+https://ethara-seat-allocation-system-t0he.onrender.com/docs
 
 # ⚙ Installation
 
