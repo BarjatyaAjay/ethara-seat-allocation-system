@@ -1,4 +1,4 @@
-# 🚀 Ethara Seat Allocation System
+# Ethara Seat Allocation System
 
 A production-ready Full Stack Seat Allocation & Project Mapping System built using **React, FastAPI, SQLite, Tailwind CSS**, and deployed on **Vercel** and **Render**.
 
@@ -66,17 +66,17 @@ A production-ready Full Stack Seat Allocation & Project Mapping System built usi
 ---
 ---
 
-# 🚀 Live Demo
+# Live Demo
 
 ### 🌐 Frontend
 
 https://ethara-seat-allocation-system-five.vercel.app
 
-### ⚙️ Backend API
+### Backend API
 
 https://ethara-seat-allocation-system-t0he.onrender.com
 
-### 📚 API Documentation (Swagger UI)
+### API Documentation (Swagger UI)
 
 https://ethara-seat-allocation-system-t0he.onrender.com/docs
 
@@ -156,7 +156,7 @@ http://localhost:5173
 
 ---
 
-# 📡 API Endpoints
+# API Endpoints
 
 ## Employees
 
@@ -188,7 +188,7 @@ http://localhost:5173
 
 ---
 
-# 🔮 Future Improvements
+# Future Improvements
 
 - JWT Authentication
 - Role-Based Access Control
@@ -207,8 +207,6 @@ http://localhost:5173
 **Ajay Bairwa**
 
 - GitHub: https://github.com/BarjatyaAjay
-- LinkedIn: *(Add your LinkedIn URL here)*
+- LinkedIn: https://www.linkedin.com/in/ajay-bairwa-cse/
 
 ---
-
-⭐ If you found this project useful, consider giving it a star.
