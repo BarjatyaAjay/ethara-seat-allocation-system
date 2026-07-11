@@ -115,11 +115,16 @@ def get_employees(
 
     if search:
         term = f"%{search}%"
+        query = query.outerjoin(Seat, Seat.employee_id == Employee.id)
         query = query.filter(
             or_(
                 Employee.name.ilike(term),
                 Employee.email.ilike(term),
                 Employee.employee_code.ilike(term),
+                Employee.department.ilike(term),
+                Employee.team.ilike(term),
+                Employee.role.ilike(term),
+                Seat.seat_code.ilike(term),
             )
         )
     if department:
