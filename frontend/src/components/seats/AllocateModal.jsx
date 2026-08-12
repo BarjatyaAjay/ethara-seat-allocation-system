@@ -38,27 +38,34 @@ const AllocateModal = ({ open, onClose, onSuccess, seat }) => {
   return (
     <Modal open={open} onClose={onClose} title={`Allocate Seat ${seat?.seat_code}`}>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <p className="text-gray-600 text-sm">
-          Assign this seat to an employee by entering their ID.
+        <p className="text-xs text-slate-300 leading-relaxed">
+          Assign seat <span className="font-bold text-emerald-400">{seat?.seat_code}</span> ({seat?.building}, Floor {seat?.floor}) to an employee by entering their numerical Employee ID.
         </p>
-        <input
-          type="number"
-          placeholder="Employee ID"
-          value={employeeId}
-          onChange={(e) => setEmployeeId(e.target.value)}
-          className="border rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          required
-        />
-        <div className="flex justify-end gap-3">
-          <button type="button" onClick={onClose} className="border px-5 py-2 rounded-lg">
+
+        <div>
+          <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+            Employee ID *
+          </label>
+          <input
+            type="number"
+            placeholder="e.g. 105"
+            value={employeeId}
+            onChange={(e) => setEmployeeId(e.target.value)}
+            className="glass-input rounded-xl p-3 text-xs w-full focus:ring-2 focus:ring-emerald-500/50"
+            required
+          />
+        </div>
+
+        <div className="flex justify-end gap-3 pt-3 border-t border-slate-800/80">
+          <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-xl text-xs border border-slate-700 text-slate-300 hover:bg-slate-800 transition">
             Cancel
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg disabled:opacity-50"
+            className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs px-6 py-2.5 rounded-xl shadow-lg transition disabled:opacity-50"
           >
-            {loading ? "Allocating..." : "Allocate"}
+            {loading ? "Allocating..." : "Allocate Seat"}
           </button>
         </div>
       </form>

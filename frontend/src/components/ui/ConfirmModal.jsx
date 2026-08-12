@@ -1,3 +1,5 @@
+import { FaExclamationTriangle } from "react-icons/fa";
+
 const ConfirmModal = ({
   open,
   title = "Confirm Action",
@@ -12,17 +14,23 @@ const ConfirmModal = ({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
-        <h2 className="text-xl font-bold mb-3">{title}</h2>
-        <p className="text-gray-600 mb-6">{message}</p>
+    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex justify-center items-center z-50 p-4 animate-in fade-in duration-200">
+      <div className="glass-panel border border-slate-700/60 rounded-2xl shadow-2xl w-full max-w-md p-6 transform animate-in zoom-in-95 slide-in-from-bottom-2 duration-250">
+        <div className="flex items-center gap-3 mb-3">
+          <div className={`p-2.5 rounded-xl ${danger ? "bg-rose-500/10 text-rose-400" : "bg-sky-500/10 text-sky-400"}`}>
+            <FaExclamationTriangle size={18} />
+          </div>
+          <h2 className="text-lg font-bold text-slate-100">{title}</h2>
+        </div>
+        
+        <p className="text-sm text-slate-300 mb-6 leading-relaxed">{message}</p>
 
-        <div className="flex justify-end gap-3">
+        <div className="flex justify-end gap-3 pt-3 border-t border-slate-800/80">
           <button
             type="button"
             onClick={onCancel}
             disabled={loading}
-            className="border px-5 py-2 rounded-lg hover:bg-gray-50"
+            className="px-4 py-2 rounded-xl text-sm border border-slate-700/80 text-slate-300 hover:bg-slate-800 btn-micro transition"
           >
             {cancelLabel}
           </button>
@@ -30,10 +38,10 @@ const ConfirmModal = ({
             type="button"
             onClick={onConfirm}
             disabled={loading}
-            className={`px-5 py-2 rounded-lg text-white ${
+            className={`px-4 py-2 rounded-xl text-sm font-medium text-white shadow-lg btn-micro btn-shine transition ${
               danger
-                ? "bg-red-600 hover:bg-red-700"
-                : "bg-blue-600 hover:bg-blue-700"
+                ? "bg-rose-600 hover:bg-rose-500 shadow-rose-600/20"
+                : "bg-sky-600 hover:bg-sky-500 shadow-sky-600/20"
             } disabled:opacity-50`}
           >
             {loading ? "Processing..." : confirmLabel}

@@ -77,88 +77,110 @@ const ProjectModal = ({ open, onClose, onSuccess, project = null }) => {
   };
 
   const inputClass = (field) =>
-    `border rounded-lg p-3 w-full ${errors[field] ? "border-red-500" : "border-gray-300"}`;
+    `glass-input rounded-xl p-3 text-xs w-full ${errors[field] ? "border-rose-500/80 focus:ring-rose-500/50" : ""}`;
 
   return (
     <Modal open={open} onClose={onClose} title={isEdit ? "Edit Project" : "Add Project"}>
       <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
+          <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+            Project Code *
+          </label>
           <input
             name="project_code"
-            placeholder="Project Code *"
+            placeholder="PRJ-101"
             value={formData.project_code}
             onChange={handleChange}
             className={inputClass("project_code")}
           />
-          {errors.project_code && <p className="text-red-500 text-sm mt-1">{errors.project_code}</p>}
+          {errors.project_code && <p className="text-rose-400 text-xs mt-1">{errors.project_code}</p>}
         </div>
 
         <div>
+          <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+            Project Name *
+          </label>
           <input
             name="name"
-            placeholder="Project Name *"
+            placeholder="Alpha Core Initiative"
             value={formData.name}
             onChange={handleChange}
             className={inputClass("name")}
           />
-          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+          {errors.name && <p className="text-rose-400 text-xs mt-1">{errors.name}</p>}
         </div>
 
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={formData.description}
-          onChange={handleChange}
-          className="border rounded-lg p-3 sm:col-span-2"
-          rows={3}
-        />
+        <div className="sm:col-span-2">
+          <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+            Description
+          </label>
+          <textarea
+            name="description"
+            placeholder="Key objectives and seat allocation requirements..."
+            value={formData.description}
+            onChange={handleChange}
+            className="glass-input rounded-xl p-3 text-xs w-full sm:col-span-2"
+            rows={3}
+          />
+        </div>
 
         <div>
+          <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+            Required Seats
+          </label>
           <input
             name="required_seats"
             type="number"
             min="0"
-            placeholder="Required Seats"
+            placeholder="10"
             value={formData.required_seats}
             onChange={handleChange}
             className={inputClass("required_seats")}
           />
-          {errors.required_seats && <p className="text-red-500 text-sm mt-1">{errors.required_seats}</p>}
+          {errors.required_seats && <p className="text-rose-400 text-xs mt-1">{errors.required_seats}</p>}
         </div>
 
         <div>
+          <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+            Priority (1-10)
+          </label>
           <input
             name="priority"
             type="number"
             min="1"
             max="10"
-            placeholder="Priority (1-10)"
+            placeholder="1"
             value={formData.priority}
             onChange={handleChange}
             className={inputClass("priority")}
           />
-          {errors.priority && <p className="text-red-500 text-sm mt-1">{errors.priority}</p>}
+          {errors.priority && <p className="text-rose-400 text-xs mt-1">{errors.priority}</p>}
         </div>
 
-        <select
-          name="status"
-          value={formData.status}
-          onChange={handleChange}
-          className="border rounded-lg p-3"
-        >
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-          <option value="completed">Completed</option>
-        </select>
+        <div className="sm:col-span-2">
+          <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+            Status
+          </label>
+          <select
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+            className="glass-input rounded-xl p-3 text-xs w-full bg-slate-900"
+          >
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
 
-        <div className="sm:col-span-2 flex justify-end gap-3 mt-2">
-          <button type="button" onClick={onClose} className="border px-5 py-2 rounded-lg hover:bg-gray-50">
+        <div className="sm:col-span-2 flex justify-end gap-3 mt-4 pt-3 border-t border-slate-800/80">
+          <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-xl text-xs border border-slate-700 text-slate-300 hover:bg-slate-800 transition">
             Cancel
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg disabled:opacity-50"
+            className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white font-semibold text-xs px-6 py-2.5 rounded-xl shadow-lg transition disabled:opacity-50"
           >
             {loading ? "Saving..." : isEdit ? "Update Project" : "Save Project"}
           </button>

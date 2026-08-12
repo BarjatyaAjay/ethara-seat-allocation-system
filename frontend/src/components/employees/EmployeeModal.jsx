@@ -97,112 +97,146 @@ const EmployeeModal = ({ open, onClose, onSuccess, employee = null }) => {
   };
 
   const inputClass = (field) =>
-    `border rounded-lg p-3 w-full ${
-      errors[field] ? "border-red-500" : "border-gray-300"
+    `glass-input rounded-xl p-3 text-xs w-full ${
+      errors[field] ? "border-rose-500/80 focus:ring-rose-500/50" : ""
     }`;
 
   return (
     <Modal
       open={open}
       onClose={onClose}
-      title={isEdit ? "Edit Employee" : "Add Employee"}
+      title={isEdit ? "Edit Employee Profile" : "Add New Employee"}
     >
       <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
+          <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+            Employee Code *
+          </label>
           <input
             name="employee_code"
-            placeholder="Employee Code *"
+            placeholder="EMP-1001"
             value={formData.employee_code}
             onChange={handleChange}
             className={inputClass("employee_code")}
           />
           {errors.employee_code && (
-            <p className="text-red-500 text-sm mt-1">{errors.employee_code}</p>
+            <p className="text-rose-400 text-xs mt-1">{errors.employee_code}</p>
           )}
         </div>
 
         <div>
+          <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+            Full Name *
+          </label>
           <input
             name="name"
-            placeholder="Employee Name *"
+            placeholder="John Doe"
             value={formData.name}
             onChange={handleChange}
             className={inputClass("name")}
           />
           {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+            <p className="text-rose-400 text-xs mt-1">{errors.name}</p>
           )}
         </div>
 
         <div>
+          <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+            Email Address *
+          </label>
           <input
             name="email"
             type="email"
-            placeholder="Email *"
+            placeholder="john.doe@company.com"
             value={formData.email}
             onChange={handleChange}
             className={inputClass("email")}
           />
           {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            <p className="text-rose-400 text-xs mt-1">{errors.email}</p>
           )}
         </div>
 
-        <input
-          name="department"
-          placeholder="Department"
-          value={formData.department}
-          onChange={handleChange}
-          className="border rounded-lg p-3"
-        />
+        <div>
+          <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+            Department
+          </label>
+          <input
+            name="department"
+            placeholder="Engineering"
+            value={formData.department}
+            onChange={handleChange}
+            className="glass-input rounded-xl p-3 text-xs w-full"
+          />
+        </div>
 
-        <input
-          name="team"
-          placeholder="Team"
-          value={formData.team}
-          onChange={handleChange}
-          className="border rounded-lg p-3"
-        />
+        <div>
+          <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+            Team
+          </label>
+          <input
+            name="team"
+            placeholder="Backend Systems"
+            value={formData.team}
+            onChange={handleChange}
+            className="glass-input rounded-xl p-3 text-xs w-full"
+          />
+        </div>
 
-        <input
-          name="role"
-          placeholder="Role"
-          value={formData.role}
-          onChange={handleChange}
-          className="border rounded-lg p-3"
-        />
+        <div>
+          <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+            Role
+          </label>
+          <input
+            name="role"
+            placeholder="Senior Developer"
+            value={formData.role}
+            onChange={handleChange}
+            className="glass-input rounded-xl p-3 text-xs w-full"
+          />
+        </div>
 
-        <input
-          name="project_id"
-          type="number"
-          placeholder="Project ID"
-          value={formData.project_id}
-          onChange={handleChange}
-          className="border rounded-lg p-3"
-        />
+        <div>
+          <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+            Project ID
+          </label>
+          <input
+            name="project_id"
+            type="number"
+            placeholder="1"
+            value={formData.project_id}
+            onChange={handleChange}
+            className="glass-input rounded-xl p-3 text-xs w-full"
+          />
+        </div>
 
-        <select
-          name="status"
-          value={formData.status}
-          onChange={handleChange}
-          className="border rounded-lg p-3"
-        >
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-        </select>
+        <div>
+          <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+            Status
+          </label>
+          <select
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+            className="glass-input rounded-xl p-3 text-xs w-full bg-slate-900"
+          >
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
 
-        <div className="sm:col-span-2 flex justify-end gap-3 mt-2">
+        <div className="sm:col-span-2 flex justify-end gap-3 mt-4 pt-3 border-t border-slate-800/80">
           <button
             type="button"
             onClick={onClose}
-            className="border px-5 py-2 rounded-lg hover:bg-gray-50"
+            className="px-5 py-2.5 rounded-xl text-xs border border-slate-700 text-slate-300 hover:bg-slate-800 transition"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg disabled:opacity-50"
+            className="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-semibold text-xs px-6 py-2.5 rounded-xl shadow-lg transition disabled:opacity-50"
           >
             {loading ? "Saving..." : isEdit ? "Update Employee" : "Save Employee"}
           </button>

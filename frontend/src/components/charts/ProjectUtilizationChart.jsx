@@ -6,10 +6,11 @@ import {
   Tooltip,
   ResponsiveContainer,
   CartesianGrid,
+  Legend,
 } from "recharts";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
-import LoadingSpinner from "../ui/LoadingSpinner";
+import Skeleton from "../ui/Skeleton";
 
 const ProjectUtilizationChart = () => {
   const [data, setData] = useState([]);
@@ -31,21 +32,38 @@ const ProjectUtilizationChart = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <LoadingSpinner message="Loading chart..." />;
+  if (loading) return <Skeleton type="chart" />;
 
   return (
-    <div className="bg-white p-5 rounded-xl shadow h-96">
-      <h2 className="text-xl font-semibold mb-4">Project Utilization (%)</h2>
-      <ResponsiveContainer width="100%" height="85%">
-        <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-          <YAxis domain={[0, 100]} />
-          <Tooltip formatter={(value) => `${value}%`} />
-          <Bar dataKey="utilization" fill="#8b5cf6" name="Employee Utilization" />
-          <Bar dataKey="fulfillment" fill="#f59e0b" name="Seat Fulfillment" />
-        </BarChart>
-      </ResponsiveContainer>
+    <div className="glass-panel p-6 rounded-2xl border border-slate-800/80 h-96 flex flex-col justify-between">
+      <div className="flex items-center justify-between mb-2">
+        <div>
+          <h2 className="text-lg font-bold text-slate-100">Project Utilization (%)</h2>
+          <p className="text-xs text-slate-400">Employee utilization & seat fulfillment rate</p>
+        </div>
+      </div>
+
+      <div className="flex-1 w-full mt-2">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.1)" />
+            <XAxis dataKey="name" tick={{ fill: "#cbd5e1", fontSize: 11 }} />
+            <YAxis domain={[0, 100]} tick={{ fill: "#94a3b8", fontSize: 11 }} />
+            <Tooltip
+              formatter={(value) => [`${value}%`]}
+              contentStyle={{
+                backgroundColor: "rgba(15, 23, 42, 0.95)",
+                borderColor: "rgba(148, 163, 184, 0.15)",
+                borderRadius: "0.75rem",
+                color: "#f8fafc",
+              }}
+            />
+            <Legend wrapperStyle={{ paddingTop: "10px", fontSize: "12px", color: "#94a3b8" }} />
+            <Bar dataKey="utilization" fill="#818cf8" name="Employee Utilization" radius={[4, 4, 0, 0]} isAnimationActive={true} />
+            <Bar dataKey="fulfillment" fill="#22d3ee" name="Seat Fulfillment" radius={[4, 4, 0, 0]} isAnimationActive={true} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };

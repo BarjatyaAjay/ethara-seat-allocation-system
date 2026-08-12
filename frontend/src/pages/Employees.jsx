@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
+import { FaEdit, FaPlus, FaTrash, FaSearch, FaTimes, FaExclamationTriangle, FaSyncAlt } from "react-icons/fa";
 import api from "../services/api";
 import EmployeeModal from "../components/employees/EmployeeModal";
 import ConfirmModal from "../components/ui/ConfirmModal";
 import EmptyState from "../components/ui/EmptyState";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
 import Pagination from "../components/ui/Pagination";
+import Skeleton from "../components/ui/Skeleton";
 
 const PAGE_SIZE = 20;
 
@@ -22,6 +22,7 @@ const initialFilters = {
 function Employees() {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [pages, setPages] = useState(0);
@@ -57,6 +58,7 @@ function Employees() {
   const fetchEmployees = useCallback(async () => {
     try {
       setLoading(true);
+      setError(false);
       const res = await api.get("/employees", {
         params: {
           page,
@@ -69,8 +71,8 @@ function Employees() {
       setTotal(res.data.total || 0);
       setPages(res.data.pages || 0);
     } catch (err) {
-      console.error(err);
-      toast.error("Failed to load employees");
+      console.error("Fetch employees error:", err);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -116,93 +118,136 @@ function Employees() {
 
   const hasFilters = Object.values(filters).some(Boolean);
 
+  const getInitials = (name) => {
+    if (!name) return "EM";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .substring(0, 2)
+      .toUpperCase();
+  };
+
   return (
-    <div className="p-4 md:p-8">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <h1 className="text-3xl font-bold">Employees</h1>
+    <div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
+      {/* Header Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 glass-panel p-6 rounded-3xl border border-slate-800/80 stagger-1 animate-page-entrance">
+        <div className="space-y-1">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight gradient-text-primary">
+              Workforce Directory
+            </h1>
+            {!error && (
+              <span className="px-2.5 py-0.5 text-xs font-bold rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
+                {total} Total
+              </span>
+            )}
+          </div>
+          <p className="text-xs md:text-sm text-slate-400">
+            Manage employee assignments, roles, and seat allocations across teams.
+          </p>
+        </div>
+
         <button
           onClick={handleAdd}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+          className="flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs md:text-sm px-5 py-2.5 rounded-xl shadow-lg btn-micro btn-shine transition duration-200"
         >
-          <FaPlus size={14} />
-          Add Employee
+          <FaPlus size={12} />
+          <span>Add Employee</span>
         </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow p-4 mb-6">
+      {/* Filter Bar */}
+      <div className="glass-panel p-5 rounded-2xl border border-slate-800/80 space-y-4 stagger-2 animate-page-entrance">
+        <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+          <FaSearch size={12} className="text-cyan-400" /> Filter Employees
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           <input
-            placeholder="Search by name"
+            placeholder="Search by name..."
             value={filters.name}
             onChange={(e) => handleFilterChange("name", e.target.value)}
-            className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="glass-input rounded-xl px-3.5 py-2 text-xs focus:ring-2 focus:ring-cyan-500/50"
           />
           <input
-            placeholder="Search by email"
+            placeholder="Search by email..."
             value={filters.email}
             onChange={(e) => handleFilterChange("email", e.target.value)}
-            className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="glass-input rounded-xl px-3.5 py-2 text-xs focus:ring-2 focus:ring-cyan-500/50"
           />
           <input
-            placeholder="Search by department"
+            placeholder="Search by department..."
             value={filters.department}
             onChange={(e) => handleFilterChange("department", e.target.value)}
-            className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="glass-input rounded-xl px-3.5 py-2 text-xs focus:ring-2 focus:ring-cyan-500/50"
           />
           <input
-            placeholder="Search by team"
+            placeholder="Search by team..."
             value={filters.team}
             onChange={(e) => handleFilterChange("team", e.target.value)}
-            className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="glass-input rounded-xl px-3.5 py-2 text-xs focus:ring-2 focus:ring-cyan-500/50"
           />
           <input
-            placeholder="Search by role"
+            placeholder="Search by role..."
             value={filters.role}
             onChange={(e) => handleFilterChange("role", e.target.value)}
-            className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="glass-input rounded-xl px-3.5 py-2 text-xs focus:ring-2 focus:ring-cyan-500/50"
           />
           <input
-            placeholder="Search by seat"
+            placeholder="Search by seat code..."
             value={filters.seat}
             onChange={(e) => handleFilterChange("seat", e.target.value)}
-            className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="glass-input rounded-xl px-3.5 py-2 text-xs focus:ring-2 focus:ring-cyan-500/50"
           />
         </div>
+
         {hasFilters && (
-          <button
-            onClick={clearFilters}
-            className="mt-3 text-sm text-blue-600 hover:underline"
-          >
-            Clear all filters
-          </button>
+          <div className="flex justify-end pt-1">
+            <button
+              onClick={clearFilters}
+              className="flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 transition font-medium"
+            >
+              <FaTimes size={10} /> Clear all filters
+            </button>
+          </div>
         )}
       </div>
 
-      <div className="flex justify-between items-center mb-4">
-        <span className="text-gray-600 text-sm">
-          {total} employee{total !== 1 ? "s" : ""} found
-        </span>
-        <span className="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm">
-          Total: {total}
-        </span>
-      </div>
-
-      <div className="bg-white rounded-xl shadow overflow-hidden">
+      {/* Table Container */}
+      <div className="glass-panel rounded-2xl border border-slate-800/80 overflow-hidden shadow-2xl stagger-3 animate-page-entrance">
         {loading ? (
-          <LoadingSpinner message="Loading employees..." />
+          <Skeleton type="table" />
+        ) : error ? (
+          <div className="p-8 text-center space-y-4 my-4">
+            <div className="p-3 rounded-2xl bg-rose-500/10 text-rose-400 w-fit mx-auto border border-rose-500/20">
+              <FaExclamationTriangle size={22} />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-base font-bold text-slate-100">Unable to load employees</h3>
+              <p className="text-xs text-slate-400">Check your connection and try again.</p>
+            </div>
+            <button
+              onClick={fetchEmployees}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold text-xs shadow-lg btn-micro btn-shine"
+            >
+              <FaSyncAlt size={12} />
+              <span>Retry</span>
+            </button>
+          </div>
         ) : employees.length === 0 ? (
           <EmptyState
             title="No employees found"
             description={
               hasFilters
-                ? "Try adjusting your search filters"
-                : "Get started by adding a new employee"
+                ? "Try adjusting your search criteria."
+                : "Get started by adding a new employee to your directory."
             }
             action={
               !hasFilters && (
                 <button
                   onClick={handleAdd}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+                  className="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs btn-micro btn-shine"
                 >
                   Add Employee
                 </button>
@@ -210,51 +255,64 @@ function Employees() {
             }
           />
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600">Code</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600">Name</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600 hidden md:table-cell">Email</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600 hidden lg:table-cell">Department</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600 hidden lg:table-cell">Team</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600 hidden xl:table-cell">Role</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600">Seat</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600">Actions</th>
+          <div className="overflow-x-auto w-full">
+            <table className="min-w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-800 text-xs font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">
+                  <th className="p-4 pl-6 min-w-[100px]">Code</th>
+                  <th className="p-4 min-w-[180px]">Employee</th>
+                  <th className="p-4 hidden md:table-cell min-w-[200px]">Email</th>
+                  <th className="p-4 hidden lg:table-cell min-w-[130px]">Department</th>
+                  <th className="p-4 hidden lg:table-cell min-w-[130px]">Team</th>
+                  <th className="p-4 hidden xl:table-cell min-w-[140px]">Role</th>
+                  <th className="p-4 min-w-[150px]">Seat</th>
+                  <th className="p-4 pr-6 text-right min-w-[110px]">Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                {employees.map((emp) => (
-                  <tr key={emp.id} className="border-t hover:bg-gray-50">
-                    <td className="p-4 text-sm">{emp.employee_code}</td>
-                    <td className="p-4 text-sm font-medium">{emp.name}</td>
-                    <td className="p-4 text-sm hidden md:table-cell">{emp.email}</td>
-                    <td className="p-4 text-sm hidden lg:table-cell">{emp.department || "-"}</td>
-                    <td className="p-4 text-sm hidden lg:table-cell">{emp.team || "-"}</td>
-                    <td className="p-4 text-sm hidden xl:table-cell">{emp.role || "-"}</td>
-                    <td className="p-4 text-sm">
+              <tbody className="divide-y divide-slate-800/60 text-xs text-slate-300">
+                {employees.map((emp, i) => (
+                  <tr
+                    key={emp.id}
+                    className="hover:bg-slate-800/50 transition-colors duration-150 animate-row-entrance"
+                    style={{ animationDelay: `${i * 20}ms` }}
+                  >
+                    <td className="p-4 pl-6 font-mono text-slate-400 font-medium whitespace-nowrap">
+                      {emp.employee_code}
+                    </td>
+                    <td className="p-4 whitespace-nowrap">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 flex items-center justify-center font-bold text-[11px] text-cyan-400 shadow-sm shrink-0">
+                          {getInitials(emp.name)}
+                        </div>
+                        <span className="font-semibold text-slate-100">{emp.name}</span>
+                      </div>
+                    </td>
+                    <td className="p-4 hidden md:table-cell text-slate-400 whitespace-nowrap">{emp.email}</td>
+                    <td className="p-4 hidden lg:table-cell whitespace-nowrap">{emp.department || "-"}</td>
+                    <td className="p-4 hidden lg:table-cell whitespace-nowrap">{emp.team || "-"}</td>
+                    <td className="p-4 hidden xl:table-cell text-slate-400 whitespace-nowrap">{emp.role || "-"}</td>
+                    <td className="p-4 whitespace-nowrap">
                       {emp.seat_code ? (
-                        <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">
-                          {emp.seat_code}
+                        <span className="seat-code-pill">
+                          <span>{emp.seat_code}</span>
                         </span>
                       ) : (
-                        <span className="text-gray-400">-</span>
+                        <span className="text-slate-500 italic">Unassigned</span>
                       )}
                     </td>
-                    <td className="p-4">
-                      <div className="flex gap-2">
+                    <td className="p-4 pr-6 text-right whitespace-nowrap">
+                      <div className="flex justify-end gap-1.5">
                         <button
                           onClick={() => handleEdit(emp)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
-                          title="Edit"
+                          className="p-2 text-slate-400 hover:text-cyan-400 hover:bg-slate-800/80 rounded-lg transition btn-micro"
+                          title="Edit Employee"
                         >
                           <FaEdit size={14} />
                         </button>
                         <button
                           onClick={() => setDeleteTarget(emp)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                          title="Delete"
+                          className="p-2 text-slate-400 hover:text-rose-400 hover:bg-slate-800/80 rounded-lg transition btn-micro"
+                          title="Delete Employee"
                         >
                           <FaTrash size={14} />
                         </button>
@@ -268,13 +326,15 @@ function Employees() {
         )}
       </div>
 
-      <Pagination
-        page={page}
-        pages={pages}
-        total={total}
-        pageSize={PAGE_SIZE}
-        onPageChange={setPage}
-      />
+      {!error && (
+        <Pagination
+          page={page}
+          pages={pages}
+          total={total}
+          pageSize={PAGE_SIZE}
+          onPageChange={setPage}
+        />
+      )}
 
       <EmployeeModal
         open={modalOpen}

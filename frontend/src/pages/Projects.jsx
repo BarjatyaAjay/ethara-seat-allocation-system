@@ -1,18 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
+import { FaEdit, FaPlus, FaTrash, FaSearch, FaExclamationTriangle, FaSyncAlt } from "react-icons/fa";
 import api from "../services/api";
 import ProjectModal from "../components/projects/ProjectModal";
 import ConfirmModal from "../components/ui/ConfirmModal";
 import EmptyState from "../components/ui/EmptyState";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
 import Pagination from "../components/ui/Pagination";
+import Skeleton from "../components/ui/Skeleton";
 
 const PAGE_SIZE = 20;
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [pages, setPages] = useState(0);
@@ -36,6 +37,7 @@ const Projects = () => {
   const fetchProjects = useCallback(async () => {
     try {
       setLoading(true);
+      setError(false);
       const res = await api.get("/projects", {
         params: {
           page,
@@ -47,8 +49,8 @@ const Projects = () => {
       setTotal(res.data.total || 0);
       setPages(res.data.pages || 0);
     } catch (err) {
-      console.error(err);
-      toast.error("Failed to load projects");
+      console.error("Fetch projects error:", err);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -74,55 +76,92 @@ const Projects = () => {
     }
   };
 
-  const statusColor = (status) => {
-    const colors = {
-      active: "bg-green-100 text-green-700",
-      inactive: "bg-gray-100 text-gray-700",
-      completed: "bg-blue-100 text-blue-700",
-    };
-    return colors[status] || "bg-gray-100 text-gray-700";
+  const statusBadge = (status) => {
+    switch (status) {
+      case "active":
+        return "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
+      case "completed":
+        return "bg-cyan-500/10 text-cyan-400 border-cyan-500/30";
+      default:
+        return "bg-slate-800 text-slate-400 border-slate-700";
+    }
   };
 
   return (
-    <div className="p-4 md:p-8">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <h1 className="text-3xl font-bold">Projects</h1>
-        <div className="flex gap-3 w-full sm:w-auto">
-          <input
-            type="text"
-            placeholder="Search projects..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="border rounded-lg px-4 py-2 flex-1 sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+    <div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
+      {/* Header Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 glass-panel p-6 rounded-3xl border border-slate-800/80 stagger-1 animate-page-entrance">
+        <div className="space-y-1">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight gradient-text-primary">
+              Project Directory
+            </h1>
+            {!error && (
+              <span className="px-2.5 py-0.5 text-xs font-bold rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/30">
+                {total} Projects
+              </span>
+            )}
+          </div>
+          <p className="text-xs md:text-sm text-slate-400">
+            Track active initiatives, priority ratings, and required seat allocations.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <FaSearch className="absolute left-3 top-3 text-slate-500 text-xs" />
+            <input
+              type="text"
+              placeholder="Search projects..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="glass-input rounded-xl pl-9 pr-3.5 py-2 text-xs w-full sm:w-60 focus:ring-2 focus:ring-cyan-500/50"
+            />
+          </div>
+
           <button
-            onClick={() => { setEditProject(null); setModalOpen(true); }}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg whitespace-nowrap"
+            onClick={() => {
+              setEditProject(null);
+              setModalOpen(true);
+            }}
+            className="flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs md:text-sm px-5 py-2.5 rounded-xl shadow-lg btn-micro btn-shine transition duration-200 whitespace-nowrap"
           >
-            <FaPlus size={14} />
-            Add
+            <FaPlus size={12} />
+            <span>Add Project</span>
           </button>
         </div>
       </div>
 
-      <div className="flex justify-between items-center mb-4">
-        <span className="text-gray-600 text-sm">
-          {total} project{total !== 1 ? "s" : ""} found
-        </span>
-      </div>
-
-      <div className="bg-white rounded-xl shadow overflow-hidden">
+      {/* Table Container */}
+      <div className="glass-panel rounded-2xl border border-slate-800/80 overflow-hidden shadow-2xl stagger-2 animate-page-entrance">
         {loading ? (
-          <LoadingSpinner message="Loading projects..." />
+          <Skeleton type="table" />
+        ) : error ? (
+          <div className="p-8 text-center space-y-4 my-4">
+            <div className="p-3 rounded-2xl bg-rose-500/10 text-rose-400 w-fit mx-auto border border-rose-500/20">
+              <FaExclamationTriangle size={22} />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-base font-bold text-slate-100">Unable to load projects</h3>
+              <p className="text-xs text-slate-400">Check your connection and try again.</p>
+            </div>
+            <button
+              onClick={fetchProjects}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold text-xs shadow-lg btn-micro btn-shine"
+            >
+              <FaSyncAlt size={12} />
+              <span>Retry</span>
+            </button>
+          </div>
         ) : projects.length === 0 ? (
           <EmptyState
             title="No projects found"
-            description={search ? "Try adjusting your search" : "Get started by adding a new project"}
+            description={search ? "Try adjusting your search query." : "Create your first project to begin tracking required seats."}
             action={
               !search && (
                 <button
                   onClick={() => setModalOpen(true)}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+                  className="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs btn-micro btn-shine"
                 >
                   Add Project
                 </button>
@@ -130,46 +169,65 @@ const Projects = () => {
             }
           />
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600">Code</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600">Project</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600">Seats</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600">Priority</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600">Status</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600">Actions</th>
+          <div className="overflow-x-auto w-full">
+            <table className="min-w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-800 text-xs font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">
+                  <th className="p-4 pl-6 min-w-[120px]">Code</th>
+                  <th className="p-4 min-w-[200px]">Project Name</th>
+                  <th className="p-4 min-w-[140px]">Required Seats</th>
+                  <th className="p-4 min-w-[100px]">Priority</th>
+                  <th className="p-4 min-w-[120px]">Status</th>
+                  <th className="p-4 pr-6 text-right min-w-[110px]">Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                {projects.map((project) => (
-                  <tr key={project.id} className="border-t hover:bg-gray-50">
-                    <td className="p-4 text-sm font-medium">{project.project_code}</td>
-                    <td className="p-4">
-                      <div className="font-semibold text-sm">{project.name}</div>
+              <tbody className="divide-y divide-slate-800/60 text-xs text-slate-300">
+                {projects.map((project, i) => (
+                  <tr
+                    key={project.id}
+                    className="hover:bg-slate-800/50 transition-colors duration-150 animate-row-entrance"
+                    style={{ animationDelay: `${i * 20}ms` }}
+                  >
+                    <td className="p-4 pl-6 font-mono text-slate-400 font-medium whitespace-nowrap">
+                      {project.project_code}
+                    </td>
+                    <td className="p-4 whitespace-nowrap">
+                      <div className="font-semibold text-slate-100">{project.name}</div>
                       {project.description && (
-                        <div className="text-xs text-gray-500 mt-1 line-clamp-1">{project.description}</div>
+                        <div className="text-[11px] text-slate-400 mt-0.5 line-clamp-1 max-w-xs">
+                          {project.description}
+                        </div>
                       )}
                     </td>
-                    <td className="p-4 text-sm">{project.required_seats}</td>
-                    <td className="p-4 text-sm">{project.priority}</td>
-                    <td className="p-4">
-                      <span className={`px-3 py-1 rounded-full text-xs ${statusColor(project.status)}`}>
+                    <td className="p-4 font-semibold text-cyan-400 whitespace-nowrap">
+                      {project.required_seats} seats
+                    </td>
+                    <td className="p-4 whitespace-nowrap">
+                      <span className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 font-semibold">
+                        P{project.priority}
+                      </span>
+                    </td>
+                    <td className="p-4 whitespace-nowrap">
+                      <span className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border ${statusBadge(project.status)}`}>
                         {project.status}
                       </span>
                     </td>
-                    <td className="p-4">
-                      <div className="flex gap-2">
+                    <td className="p-4 pr-6 text-right whitespace-nowrap">
+                      <div className="flex justify-end gap-1.5">
                         <button
-                          onClick={() => { setEditProject(project); setModalOpen(true); }}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                          onClick={() => {
+                            setEditProject(project);
+                            setModalOpen(true);
+                          }}
+                          className="p-2 text-slate-400 hover:text-cyan-400 hover:bg-slate-800/80 rounded-lg transition btn-micro"
+                          title="Edit Project"
                         >
                           <FaEdit size={14} />
                         </button>
                         <button
                           onClick={() => setDeleteTarget(project)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                          className="p-2 text-slate-400 hover:text-rose-400 hover:bg-slate-800/80 rounded-lg transition btn-micro"
+                          title="Delete Project"
                         >
                           <FaTrash size={14} />
                         </button>
@@ -183,17 +241,22 @@ const Projects = () => {
         )}
       </div>
 
-      <Pagination
-        page={page}
-        pages={pages}
-        total={total}
-        pageSize={PAGE_SIZE}
-        onPageChange={setPage}
-      />
+      {!error && (
+        <Pagination
+          page={page}
+          pages={pages}
+          total={total}
+          pageSize={PAGE_SIZE}
+          onPageChange={setPage}
+        />
+      )}
 
       <ProjectModal
         open={modalOpen}
-        onClose={() => { setModalOpen(false); setEditProject(null); }}
+        onClose={() => {
+          setModalOpen(false);
+          setEditProject(null);
+        }}
         onSuccess={fetchProjects}
         project={editProject}
       />

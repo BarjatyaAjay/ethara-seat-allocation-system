@@ -1,4 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
+
+:root {
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --bg-dark: #050b16;
+  --bg-card: #0b1220;
+  --border-glass: rgba(148, 163, 184, 0.15);
+  --border-glass-hover: rgba(148, 163, 184, 0.25);
+  
+  /* Restrained Enterprise Palette */
+  --accent-cyan: #22d3ee;
+  --accent-indigo: #818cf8;
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  
+  --ease-enterprise: cubic-bezier(0.16, 1, 0.3, 1);
+}
 
 html,
 body,
@@ -7,4 +26,281 @@ body,
   padding: 0;
   width: 100%;
   min-height: 100%;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(11, 18, 32, 0.6);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4);
+}
+
+/* Glassmorphism Panels & Cards */
+.glass-panel {
+  background: rgba(11, 18, 32, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  transition: border-color 0.25s var(--ease-enterprise), box-shadow 0.25s var(--ease-enterprise), transform 0.25s var(--ease-enterprise);
+}
+
+.glass-card {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: 1rem;
+  transition: all 0.25s var(--ease-enterprise);
+}
+
+.glass-header {
+  background: rgba(5, 11, 22, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.glass-input {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  color: #f8fafc;
+  transition: all 0.2s var(--ease-enterprise);
+}
+
+.glass-input:focus {
+  background: rgba(15, 23, 42, 0.9);
+  border-color: rgba(34, 211, 238, 0.6);
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.15);
+  outline: none;
+}
+
+.glass-input::placeholder {
+  color: #64748b;
+}
+
+/* Seat Code Pill - Single-Line Non-Clipping Standard */
+.seat-code-pill {
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.375rem !important;
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 9999px !important;
+  font-family: monospace !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+  line-height: 1 !important;
+  background-color: rgba(34, 211, 238, 0.1) !important;
+  border: 1px solid rgba(34, 211, 238, 0.3) !important;
+  color: #22d3ee !important;
+  box-sizing: border-box !important;
+}
+
+/* Gradient Text Utilities */
+.gradient-text-primary {
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-cyan {
+  background: linear-gradient(135deg, #22d3ee 0%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-indigo {
+  background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Page Entrance Animations */
+@keyframes pageEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-page-entrance {
+  animation: pageEntrance 400ms var(--ease-enterprise) forwards;
+}
+
+.stagger-1 { animation-delay: 0ms; }
+.stagger-2 { animation-delay: 60ms; }
+.stagger-3 { animation-delay: 120ms; }
+.stagger-4 { animation-delay: 180ms; }
+
+/* Micro-Interaction Button Scale */
+.btn-micro {
+  transition: transform 0.15s var(--ease-enterprise), box-shadow 0.2s var(--ease-enterprise), background-color 0.2s var(--ease-enterprise);
+}
+
+.btn-micro:hover {
+  transform: scale(1.02);
+}
+
+.btn-micro:active {
+  transform: scale(0.97);
+}
+
+/* Button Shine Sweep Effect */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -75%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transform: rotate(25deg);
+  transition: left 0.6s var(--ease-enterprise);
+}
+
+.btn-shine:hover::after {
+  left: 125%;
+}
+
+/* Surface Highlight Sweep for Stat Cards */
+.card-shine-surface {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-shine-surface::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 50%,
+    transparent 100%
+  );
+  transition: left 0.7s var(--ease-enterprise);
+  pointer-events-none: true;
+}
+
+.card-shine-surface:hover::before {
+  left: 100%;
+}
+
+/* Skeleton Sweep */
+@keyframes shimmerSweep {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(11, 18, 32, 0.6) 0%,
+    rgba(30, 41, 59, 0.8) 50%,
+    rgba(11, 18, 32, 0.6) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmerSweep 2.2s infinite ease-in-out;
+}
+
+/* Table Row Entrance */
+@keyframes rowFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-row-entrance {
+  animation: rowFadeIn 250ms var(--ease-enterprise) forwards;
+}
+
+/* Notification Pulse Indicator */
+@keyframes dotPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.8;
+  }
+}
+
+.animate-dot-pulse {
+  animation: dotPulse 2.5s infinite ease-in-out;
+}
+
+/* Recharts Overrides */
+.recharts-default-tooltip {
+  background-color: rgba(15, 23, 42, 0.95) !important;
+  border: 1px solid rgba(148, 163, 184, 0.15) !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+  color: #f8fafc !important;
+  padding: 10px 14px !important;
+}
+
+.recharts-tooltip-label {
+  color: #94a3b8 !important;
+  font-weight: 600 !important;
+  margin-bottom: 4px !important;
+}
+
+.recharts-cartesian-grid-line {
+  stroke: rgba(148, 163, 184, 0.1) !important;
+}
+
+.recharts-text {
+  fill: #94a3b8 !important;
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

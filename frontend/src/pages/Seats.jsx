@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { FaChair, FaUserMinus, FaUserPlus } from "react-icons/fa";
+import { FaChair, FaUserMinus, FaUserPlus, FaSearch, FaFilter, FaTimes, FaExclamationTriangle, FaSyncAlt } from "react-icons/fa";
 import api from "../services/api";
 import AllocateModal from "../components/seats/AllocateModal";
 import ConfirmModal from "../components/ui/ConfirmModal";
 import EmptyState from "../components/ui/EmptyState";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
 import Pagination from "../components/ui/Pagination";
+import Skeleton from "../components/ui/Skeleton";
 
 const PAGE_SIZE = 20;
 
@@ -21,6 +21,7 @@ const STATUS_OPTIONS = [
 const Seats = () => {
   const [seats, setSeats] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [pages, setPages] = useState(0);
@@ -50,6 +51,7 @@ const Seats = () => {
   const fetchSeats = useCallback(async () => {
     try {
       setLoading(true);
+      setError(false);
       const params = {
         page,
         page_size: PAGE_SIZE,
@@ -68,8 +70,8 @@ const Seats = () => {
       setTotal(building ? items.length : res.data.total || 0);
       setPages(building ? 1 : res.data.pages || 0);
     } catch (err) {
-      console.error(err);
-      toast.error("Failed to load seats");
+      console.error("Fetch seats error:", err);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -112,133 +114,202 @@ const Seats = () => {
     }
   };
 
-  const statusColor = (s) => {
-    const colors = {
-      available: "bg-blue-100 text-blue-700",
-      allocated: "bg-green-100 text-green-700",
-      maintenance: "bg-yellow-100 text-yellow-700",
-      reserved: "bg-purple-100 text-purple-700",
-    };
-    return colors[s] || "bg-gray-100 text-gray-700";
+  const statusBadge = (s) => {
+    switch (s) {
+      case "available":
+        return "bg-cyan-500/10 text-cyan-400 border-cyan-500/30";
+      case "allocated":
+        return "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
+      case "maintenance":
+        return "bg-amber-500/10 text-amber-400 border-amber-500/30";
+      case "reserved":
+        return "bg-indigo-500/10 text-indigo-400 border-indigo-500/30";
+      default:
+        return "bg-slate-800 text-slate-400 border-slate-700";
+    }
   };
 
   const hasFilters = search || building || floor || status;
 
   return (
-    <div className="p-4 md:p-8">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <h1 className="text-3xl font-bold flex items-center gap-2">
-          <FaChair /> Seat Management
-        </h1>
+    <div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
+      {/* Header Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 glass-panel p-6 rounded-3xl border border-slate-800/80 stagger-1 animate-page-entrance">
+        <div className="space-y-1">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight gradient-text-primary">
+              Seat Management
+            </h1>
+            {!error && (
+              <span className="px-2.5 py-0.5 text-xs font-bold rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
+                {total} Seats
+              </span>
+            )}
+          </div>
+          <p className="text-xs md:text-sm text-slate-400">
+            Monitor floor maps, availability status, and assign workforce seats.
+          </p>
+        </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow p-4 mb-6">
+      {/* Filter Bar */}
+      <div className="glass-panel p-5 rounded-2xl border border-slate-800/80 space-y-4 stagger-2 animate-page-entrance">
+        <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+          <FaFilter size={12} className="text-cyan-400" /> Filter Seats
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          <input
-            placeholder="Search seat, zone, building..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div className="relative">
+            <FaSearch className="absolute left-3 top-3 text-slate-500 text-xs" />
+            <input
+              placeholder="Search seat, zone, building..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="glass-input rounded-xl pl-9 pr-3.5 py-2 text-xs w-full focus:ring-2 focus:ring-cyan-500/50"
+            />
+          </div>
+
           <select
             value={building}
             onChange={(e) => setBuilding(e.target.value)}
-            className="border rounded-lg px-3 py-2 text-sm"
+            className="glass-input rounded-xl px-3.5 py-2 text-xs bg-slate-900 focus:ring-2 focus:ring-cyan-500/50"
           >
             <option value="">All Buildings</option>
             {buildings.map((b) => (
               <option key={b} value={b}>{b}</option>
             ))}
           </select>
+
           <select
             value={floor}
             onChange={(e) => setFloor(e.target.value)}
-            className="border rounded-lg px-3 py-2 text-sm"
+            className="glass-input rounded-xl px-3.5 py-2 text-xs bg-slate-900 focus:ring-2 focus:ring-cyan-500/50"
           >
             <option value="">All Floors</option>
             {floors.map((f) => (
               <option key={f} value={f}>Floor {f}</option>
             ))}
           </select>
+
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className="border rounded-lg px-3 py-2 text-sm"
+            className="glass-input rounded-xl px-3.5 py-2 text-xs bg-slate-900 focus:ring-2 focus:ring-cyan-500/50"
           >
             {STATUS_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
           </select>
         </div>
+
         {hasFilters && (
-          <button
-            onClick={() => { setSearch(""); setBuilding(""); setFloor(""); setStatus(""); }}
-            className="mt-3 text-sm text-blue-600 hover:underline"
-          >
-            Clear all filters
-          </button>
+          <div className="flex justify-end pt-1">
+            <button
+              onClick={() => {
+                setSearch("");
+                setBuilding("");
+                setFloor("");
+                setStatus("");
+              }}
+              className="flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 transition font-medium"
+            >
+              <FaTimes size={10} /> Clear all filters
+            </button>
+          </div>
         )}
       </div>
 
-      <div className="flex justify-between items-center mb-4">
-        <span className="text-gray-600 text-sm">{total} seat{total !== 1 ? "s" : ""} found</span>
-      </div>
-
-      <div className="bg-white rounded-xl shadow overflow-hidden">
+      {/* Table Container - Responsive Horizontal Scroll with Non-Breaking Seat Code Pills */}
+      <div className="glass-panel rounded-2xl border border-slate-800/80 overflow-hidden shadow-2xl stagger-3 animate-page-entrance">
         {loading ? (
-          <LoadingSpinner message="Loading seats..." />
+          <Skeleton type="table" />
+        ) : error ? (
+          <div className="p-8 text-center space-y-4 my-4">
+            <div className="p-3 rounded-2xl bg-rose-500/10 text-rose-400 w-fit mx-auto border border-rose-500/20">
+              <FaExclamationTriangle size={22} />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-base font-bold text-slate-100">Unable to load seats</h3>
+              <p className="text-xs text-slate-400">Check your connection and try again.</p>
+            </div>
+            <button
+              onClick={fetchSeats}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold text-xs shadow-lg btn-micro btn-shine"
+            >
+              <FaSyncAlt size={12} />
+              <span>Retry</span>
+            </button>
+          </div>
         ) : seats.length === 0 ? (
           <EmptyState
             title="No seats found"
-            description={hasFilters ? "Try adjusting your filters" : "No seats available"}
+            description={hasFilters ? "Try adjusting your filter selections." : "No seats are registered in the system."}
           />
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600">Seat</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600">Building</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600">Floor</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600 hidden md:table-cell">Zone</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600 hidden lg:table-cell">Type</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600">Employee</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600">Status</th>
-                  <th className="p-4 text-left text-sm font-semibold text-gray-600">Actions</th>
+          <div className="overflow-x-auto w-full">
+            <table className="min-w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-800 text-xs font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">
+                  <th className="p-4 pl-6 min-w-[160px]">Seat Code</th>
+                  <th className="p-4 min-w-[130px]">Building</th>
+                  <th className="p-4 min-w-[90px]">Floor</th>
+                  <th className="p-4 hidden md:table-cell min-w-[100px]">Zone</th>
+                  <th className="p-4 hidden lg:table-cell min-w-[100px]">Type</th>
+                  <th className="p-4 min-w-[160px]">Occupant</th>
+                  <th className="p-4 min-w-[120px]">Status</th>
+                  <th className="p-4 pr-6 text-right min-w-[130px]">Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                {seats.map((seat) => (
-                  <tr key={seat.id} className="border-t hover:bg-gray-50">
-                    <td className="p-4 text-sm font-semibold">{seat.seat_code}</td>
-                    <td className="p-4 text-sm">{seat.building}</td>
-                    <td className="p-4 text-sm">{seat.floor}</td>
-                    <td className="p-4 text-sm hidden md:table-cell">{seat.zone || "-"}</td>
-                    <td className="p-4 text-sm hidden lg:table-cell">{seat.seat_type}</td>
-                    <td className="p-4 text-sm">{seat.employee_name || "-"}</td>
-                    <td className="p-4">
-                      <span className={`px-3 py-1 rounded-full text-xs ${statusColor(seat.status)}`}>
+              <tbody className="divide-y divide-slate-800/60 text-xs text-slate-300">
+                {seats.map((seat, i) => (
+                  <tr
+                    key={seat.id}
+                    className="hover:bg-slate-800/50 transition-colors duration-150 animate-row-entrance"
+                    style={{ animationDelay: `${i * 20}ms` }}
+                  >
+                    {/* Seat Code: Guaranteed single line non-breaking pill */}
+                    <td className="p-4 pl-6 whitespace-nowrap">
+                      <span className="seat-code-pill">
+                        <FaChair className="text-cyan-400 text-[11px] shrink-0" />
+                        <span>{seat.seat_code}</span>
+                      </span>
+                    </td>
+                    <td className="p-4 font-medium whitespace-nowrap text-slate-200">{seat.building}</td>
+                    <td className="p-4 text-slate-400 whitespace-nowrap">Floor {seat.floor}</td>
+                    <td className="p-4 hidden md:table-cell text-slate-400 whitespace-nowrap">{seat.zone || "-"}</td>
+                    <td className="p-4 hidden lg:table-cell text-slate-400 capitalize whitespace-nowrap">{seat.seat_type}</td>
+                    <td className="p-4 whitespace-nowrap">
+                      {seat.employee_name ? (
+                        <span className="font-semibold text-slate-100">{seat.employee_name}</span>
+                      ) : (
+                        <span className="text-slate-500 italic">Unoccupied</span>
+                      )}
+                    </td>
+                    <td className="p-4 whitespace-nowrap">
+                      <span className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border ${statusBadge(seat.status)}`}>
                         {seat.status}
                       </span>
                     </td>
-                    <td className="p-4">
-                      <div className="flex gap-2">
+                    <td className="p-4 pr-6 text-right whitespace-nowrap">
+                      <div className="flex justify-end gap-1.5">
                         {seat.status === "available" && !seat.employee_id && (
                           <button
                             onClick={() => setAllocateSeat(seat)}
-                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
-                            title="Allocate"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 font-semibold transition btn-micro"
+                            title="Allocate Seat"
                           >
-                            <FaUserPlus size={14} />
+                            <FaUserPlus size={12} />
+                            <span>Allocate</span>
                           </button>
                         )}
                         {seat.employee_id && (
                           <button
                             onClick={() => setReleaseTarget(seat)}
-                            className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg"
-                            title="Release"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500/20 font-semibold transition btn-micro"
+                            title="Release Seat"
                           >
-                            <FaUserMinus size={14} />
+                            <FaUserMinus size={12} />
+                            <span>Release</span>
                           </button>
                         )}
                       </div>
@@ -251,13 +322,15 @@ const Seats = () => {
         )}
       </div>
 
-      <Pagination
-        page={page}
-        pages={pages}
-        total={total}
-        pageSize={PAGE_SIZE}
-        onPageChange={setPage}
-      />
+      {!error && (
+        <Pagination
+          page={page}
+          pages={pages}
+          total={total}
+          pageSize={PAGE_SIZE}
+          onPageChange={setPage}
+        />
+      )}
 
       <AllocateModal
         open={Boolean(allocateSeat)}
@@ -269,8 +342,8 @@ const Seats = () => {
       <ConfirmModal
         open={Boolean(releaseTarget)}
         title="Release Seat"
-        message={`Release seat ${releaseTarget?.seat_code} from ${releaseTarget?.employee_name}?`}
-        confirmLabel="Release"
+        message={`Are you sure you want to release seat ${releaseTarget?.seat_code} from ${releaseTarget?.employee_name}?`}
+        confirmLabel="Release Seat"
         onConfirm={handleRelease}
         onCancel={() => setReleaseTarget(null)}
         loading={releasing}
